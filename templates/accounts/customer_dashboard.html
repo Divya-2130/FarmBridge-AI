@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Welcome back, {{ user.username }}</h2>
+<div class="grid">
+  <div class="card">
+    <h3>Browse Marketplace</h3>
+    <p>Discover fresh produce from verified farmers near you.</p>
+    <a class="btn" href="{% url 'product-list' %}">Shop Now</a>
+  </div>
+  <div class="card">
+    <h3>Recent Orders</h3>
+    {% for order in orders %}
+      <p>Order #{{ order.id }} — <span class="status-pill">{{ order.status }}</span></p>
+    {% empty %}<p>No orders yet.</p>{% endfor %}
+    <a class="btn" href="{% url 'my-orders' %}">View All Orders</a>
+  </div>
+</div>
+{% endblock %}

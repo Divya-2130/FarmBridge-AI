@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:700px;margin:0 auto;">
+  {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">
+  {% else %}<img src="https://placehold.co/700x300/2f6b3a/ffffff?text={{ product.name|urlencode }}" alt="{{ product.name }}">{% endif %}
+  <span class="badge">Grade {{ product.quality_grade }}</span>
+  <h2>{{ product.name }}</h2>
+  <p>{{ product.category }} · Harvested {{ product.harvest_date }}</p>
+  <p>Farm: <strong>{{ product.farm.farm_name }}</strong> ({{ product.farm.farming_method }}) — {{ product.farm.location }}</p>
+  <p class="price">₹{{ product.price_per_kg }} / kg &nbsp; · &nbsp; {{ product.quantity_available_kg }} kg available</p>
+  {% if product.is_preorder_available %}<span class="badge">Pre-order available</span>{% endif %}
+
+  {% if user.is_authenticated and user.role == "CUSTOMER" %}
+  <form method="post" action="{% url 'add-to-cart' product.id %}" style="margin-top:16px;">
+    {% csrf_token %}
+    <label>Quantity (kg)</label>
+    <input type="number" step="0.5" name="quantity_kg" value="1" min="0.5">
+    <button class="btn" type="submit">Add to Cart</button>
+  </form>
+  {% endif %}
+
+  <h3 style="margin-top:24px;">Reviews</h3>
+  {% for review in product.reviews.all %}
+    <p><strong>{{ review.rating }}★</strong> — {{ review.comment }} <span style="color:var(--color-muted);">({{ review.customer.username }})</span></p>
+  {% empty %}
+    <p>No reviews yet.</p>
+  {% endfor %}
+
+  {% if user.is_authenticated %}
+  <form method="post" action="{% url 'add-review' product.id %}">
+    {% csrf_token %}
+    <label>Rating (1-5)</label>
+    <input type="number" name="rating" min="1" max="5" required>
+    <label>Comment</label>
+    <textarea name="comment" rows="3"></textarea>
+    <button class="btn" type="submit">Submit Review</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

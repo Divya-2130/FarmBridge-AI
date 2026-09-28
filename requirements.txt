@@ -1,0 +1,9 @@
+Django==4.2.14
+mysqlclient==2.2.4          # remove this and use sqlite3 (built-in) if MySQL isn't installed yet
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
+scikit-learn==1.5.1
+pandas==2.2.2
+joblib==1.4.2
+razorpay==1.4.2
+Pillow==10.4.0

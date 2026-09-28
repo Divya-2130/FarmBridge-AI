@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:500px;margin:0 auto;">
+  <h2>Add a Product</h2>
+  {% if not farm %}
+    <p>You need to create a farm profile before adding products.</p>
+  {% elif not kyc_approved %}
+    <p>Your KYC is not approved yet. Please wait for admin approval before adding products.</p>
+  {% else %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Product Name</label>
+    <input type="text" name="name" required>
+    <label>Category</label>
+    <input type="text" name="category" placeholder="e.g. Vegetables" required>
+    <label>Price per KG (₹)</label>
+    <input type="number" step="0.01" name="price_per_kg" required>
+    <label>Quantity Available (KG)</label>
+    <input type="number" step="0.01" name="quantity_available_kg" required>
+    <label>Quality Grade</label>
+    <select name="quality_grade">
+      <option value="A">Grade A - Premium</option>
+      <option value="B" selected>Grade B - Standard</option>
+      <option value="C">Grade C - Economy</option>
+    </select>
+    <label>Harvest Date</label>
+    <input type="date" name="harvest_date" required>
+    <label><input type="checkbox" name="is_preorder_available" style="width:auto;"> Allow pre-orders</label>
+    <label>Product Image</label>
+    <input type="file" name="image">
+    <button class="btn" type="submit">Save Product</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

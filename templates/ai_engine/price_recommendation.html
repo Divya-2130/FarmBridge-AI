@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:480px;margin:0 auto;">
+  <h2>🤖 AI Demand & Price Recommendation</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label>Season</label>
+    <select name="season">
+      <option value="1">Winter</option>
+      <option value="2">Spring</option>
+      <option value="3">Summer</option>
+      <option value="4">Autumn</option>
+    </select>
+    <label>Past Average Demand (kg)</label>
+    <input type="number" step="0.1" name="past_avg_demand_kg" value="900" required>
+    <label>Past Average Price (₹/kg)</label>
+    <input type="number" step="0.1" name="past_avg_price" value="35" required>
+    <button class="btn" type="submit">Predict</button>
+  </form>
+
+  {% if result %}
+  <div style="margin-top:20px;padding:16px;background:var(--color-primary-light);border-radius:10px;">
+    <p><strong>Predicted demand:</strong> {{ result.predicted_demand_kg }} KG</p>
+    <p><strong>Recommended price:</strong> ₹{{ result.recommended_price_low }} – ₹{{ result.recommended_price_high }} / KG</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

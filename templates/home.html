@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>Farm to Customer, Made Simple and Smart</h1>
+  <p>FarmBridge AI connects verified farmers directly with customers — with AI-powered demand and price guidance along the way.</p>
+  <a class="btn" href="{% url 'product-list' %}">Browse Marketplace</a>
+  <a class="btn btn-outline" href="{% url 'register' %}">Join as Farmer or Customer</a>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>🧑‍🌾 For Farmers</h3>
+    <p>List products, manage your farm, and get AI price recommendations.</p>
+  </div>
+  <div class="card">
+    <h3>🛒 For Customers</h3>
+    <p>Discover fresh produce, order or pre-order, and track delivery.</p>
+  </div>
+  <div class="card">
+    <h3>🤖 AI Insights</h3>
+    <p>Demand prediction and price recommendation, powered by Scikit-learn.</p>
+  </div>
+</div>
+{% endblock %}

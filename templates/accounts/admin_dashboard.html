@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+<div class="grid">
+  <div class="card"><h3>{{ total_farmers }}</h3><p>Farmers</p></div>
+  <div class="card"><h3>{{ total_customers }}</h3><p>Customers</p></div>
+  <div class="card"><h3>{{ total_products }}</h3><p>Products Listed</p></div>
+  <div class="card"><h3>{{ total_orders }}</h3><p>Total Orders</p></div>
+</div>
+
+<h3 style="margin-top:32px;">Pending KYC Approvals</h3>
+<table>
+  <tr><th>Farmer</th><th>Submitted</th><th>Action</th></tr>
+  {% for kyc in pending_kyc %}
+  <tr>
+    <td>{{ kyc.user.username }}</td>
+    <td>{{ kyc.submitted_at|date:"d M Y" }}</td>
+    <td>
+      <form method="post" action="{% url 'admin-approve-kyc' kyc.id %}" style="display:inline;">
+        {% csrf_token %}
+        <button class="btn" name="action" value="approve" type="submit">Approve</button>
+        <button class="btn" name="action" value="reject" type="submit" style="background:var(--color-danger);">Reject</button>
+      </form>
+    </td>
+  </tr>
+  {% empty %}<tr><td colspan="3">No pending KYC requests.</td></tr>{% endfor %}
+</table>
+
+<h3 style="margin-top:32px;">Recent Orders</h3>
+<table>
+  <tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th></tr>
+  {% for order in recent_orders %}
+  <tr><td>{{ order.id }}</td><td>{{ order.customer.username }}</td><td>₹{{ order.total_amount }}</td><td><span class="status-pill">{{ order.status }}</span></td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

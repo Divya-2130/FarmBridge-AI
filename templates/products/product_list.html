@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Marketplace</h2>
+<form method="get" style="display:flex;gap:12px;margin-bottom:20px;">
+  <input type="text" name="q" placeholder="Search products..." value="{{ request.GET.q }}">
+  <input type="text" name="category" placeholder="Category" value="{{ request.GET.category }}">
+  <input type="number" name="max_price" placeholder="Max price/kg" value="{{ request.GET.max_price }}">
+  <button class="btn" type="submit">Filter</button>
+</form>
+
+<div class="grid">
+  {% for product in products %}
+  <div class="card">
+    {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}<img src="https://placehold.co/400x260/2f6b3a/ffffff?text={{ product.name|urlencode }}" alt="{{ product.name }}">{% endif %}
+    <span class="badge">Grade {{ product.quality_grade }}</span>
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.farm.farm_name }} · {{ product.farm.location }}</p>
+    <p class="price">₹{{ product.price_per_kg }} / kg</p>
+    <a class="btn" href="{% url 'product-detail' product.id %}">View Details</a>
+  </div>
+  {% empty %}
+    <p>No products found yet — check back soon!</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width:480px;margin:0 auto;">
+  <h2>Submit KYC</h2>
+  <p>Current status: <span class="status-pill">{{ profile.kyc_status }}</span></p>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>ID Document</label>
+    <input type="file" name="id_document" required>
+    <button class="btn" type="submit">Submit for Review</button>
+  </form>
+</div>
+{% endblock %}

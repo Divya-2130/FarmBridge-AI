@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Farmer Dashboard</h2>
+<p>KYC Status: <span class="status-pill">{{ profile.kyc_status }}</span>
+  {% if profile.kyc_status != "APPROVED" %}<a class="btn" href="{% url 'submit-kyc' %}" style="margin-left:10px;">Submit KYC</a>{% endif %}
+</p>
+
+<div class="grid">
+  <div class="card">
+    <h3>My Products ({{ products.count }})</h3>
+    <a class="btn" href="{% url 'add-product' %}">+ Add Product</a>
+    <table style="margin-top:12px;">
+      <tr><th>Name</th><th>Price/kg</th><th>Available (kg)</th></tr>
+      {% for p in products %}
+      <tr><td>{{ p.name }}</td><td>₹{{ p.price_per_kg }}</td><td>{{ p.quantity_available_kg }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Pending Orders</h3>
+    <table>
+      <tr><th>Product</th><th>Qty (kg)</th><th>Status</th><th>Update</th></tr>
+      {% for item in pending_orders %}
+      <tr>
+        <td>{{ item.product.name }}</td>
+        <td>{{ item.quantity_kg }}</td>
+        <td><span class="status-pill">{{ item.order.status }}</span></td>
+        <td>
+          <form method="post" action="{% url 'update-order-status' item.order.id %}">
+            {% csrf_token %}
+            <select name="status" onchange="this.form.submit()">
+              <option value="PENDING">Pending</option>
+              <option value="CONFIRMED">Confirmed</option>
+              <option value="PROCESSING">Processing</option>
+              <option value="PACKED">Packed</option>
+              <option value="SHIPPED">Shipped</option>
+              <option value="OUT_FOR_DELIVERY">Out for Delivery</option>
+              <option value="DELIVERED">Delivered</option>
+            </select>
+          </form>
+        </td>
+      </tr>
+      {% empty %}<tr><td colspan="4">No pending orders.</td></tr>{% endfor %}
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>🤖 AI Price Recommendation</h3>
+    <p>Get a demand forecast and suggested price range for your next harvest.</p>
+    <a class="btn" href="{% url 'price-recommendation' %}">Open AI Tool</a>
+  </div>
+</div>
+{% endblock %}
